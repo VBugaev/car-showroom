@@ -1,0 +1,11 @@
+.page-wrapper {
+    height: 100vh;
+}
+
+.inner-page-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+.inner-page-content {
+    flex-basis: 100%;
+}

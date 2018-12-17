@@ -1,16 +1,13 @@
+import { Container, Row } from 'reactstrap';
 import Header from '../Header'
 
-const layoutStyle = {
-  margin: 20,
-  padding: 20,
-  border: '1px solid #DDD'
-}
-
 const Layout = (props) => (
-  <div style={layoutStyle}>
-    <Header />
-    {props.children}
-  </div>
+  <Container fluid className="page-wrapper inner-page-wrapper">
+  <Header title={props.title} />
+  <Row className="inner-page-content">
+      {props.children}
+  </Row>
+</Container>
 )
 
 export default Layout
