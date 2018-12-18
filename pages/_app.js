@@ -13,6 +13,9 @@ class MyApp extends App {
     const {Component, pageProps, reduxStore} = this.props
     return (
       <Container>
+        <Head>
+        <title>Car showroom</title>
+        </Head>
         <Provider store={reduxStore}>
           <Component {...pageProps} />
         </Provider>
