@@ -36,7 +36,7 @@ export default class extends Component {
                 <div className="m-auto">
                     <ClipLoader
                         sizeUnit="px"
-                        size={125}
+                        size={100}
                         color={'#000000'}
                         loading={isLoading}
                     />
