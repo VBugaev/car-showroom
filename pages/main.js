@@ -20,6 +20,7 @@ export default class extends React.Component {
                       <Button className="user-section-btn">Manage clients</Button>
                       <Button className="user-section-btn">Manage orders</Button>
                       <Button className="user-section-btn">Manage test drives</Button>
+                      <Button className="user-section-btn">Manage entities</Button>
                     </Card>
                 </Col>
                 <Col md="9" className="main-page-section">
