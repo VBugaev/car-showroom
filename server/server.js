@@ -36,6 +36,10 @@ app.prepare()
     app.render(req, res, '/register');
   })
 
+  server.get('/entities', (req, res) => {
+    app.render(req, res, '/entities');
+  })
+
   server.get('*', (req, res) => {
     return handle(req, res)
   })

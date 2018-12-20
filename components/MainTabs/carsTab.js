@@ -53,19 +53,31 @@ class CarsTab extends Component {
         }
     }
 
+    getAutos = () => {
+        this.setState({isLoading: true});
+        fetch('api/autos')
+        .then(r => r.json())
+        .then(data => {
+            this.setState({cars: data});
+            this.setState({isLoading: false});
+        });
+    }
+
+    deleteAuto = (id) => {
+        fetch(`api/autos?id=${id}`, {
+            method: 'DELETE'
+        })
+        .then(() => this.getAutos());
+    }
+
     componentDidMount = () => {
-      fetch('http://localhost:3000/api/autos')
-      .then(r => r.json())
-      .then(data => {
-          this.setState({cars: data});
-          this.setState({isLoading: false});
-      });
+        this.getAutos();
     }
     
     
     render() {
         const { props, state } = this;
-        
+
         return state.isLoading ? 
         (<div style={{position: "absolute", left: 0, right: 0, bottom: 0, top: 0}}>
             <div style={{ position: "absolute", transform:"(-50%, -50%)", left:"50%", top: "40%" }}>
@@ -92,8 +104,9 @@ class CarsTab extends Component {
                     Air conditioning: ${elem.AirConditioning}; Max speed: ${elem.MaxSpeed}`}</CardText>
                     <CardText>Price: {`${elem.Price} rubles`}</CardText>
                     <Row>
-                        <Col sm="6"><Button block>Buy</Button></Col>
-                        <Col sm="6"><Button block>Register on test drive</Button></Col>
+                        <Col sm="3"><Button>Buy</Button></Col>
+                        <Col sm="3"><Button>Register on test drive</Button></Col>
+                        <Col sm="3"><Button onClick={() => this.deleteAuto(elem.Id)}>Delete car</Button></Col>
                     </Row>
                   </Card>
               </Col>

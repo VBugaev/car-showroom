@@ -1,16 +1,13 @@
-import { createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import thunkMiddleware from 'redux-thunk'
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { combineReducers } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import { reducer as formReducer } from 'redux-form';
 
-const exampleInitialState = {
-  lastUpdate: 0,
-  light: false,
-  count: 0
-}
+export const rootReducer = combineReducers({
+  form: formReducer
+});
 
-export const reducer = (state = exampleInitialState, action) => { 
-}
-
-export function initializeStore (initialState = exampleInitialState) {
-  return createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)))
-}
+export function initializeStore (initialState = {}) {
+  return createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)))
+};
