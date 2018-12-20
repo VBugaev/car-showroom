@@ -17,40 +17,36 @@ import './tabs.css';
 import fetch from 'unfetch';
 import Spinner from '../Spinner';
 
-
-const cars = [
-    {
-        brand: 'Mazda',
-        model: 'RX6',
-        additionalParams: `Mazda Mazda Mazda
-        Mazda Mazda Mazda
-        Mazda Mazda Mazda`,
-        price: 10000000
-    },
-    {
-        brand: 'Mazda',
-        model: 'RX7',
-        additionalParams: `Mazda Mazda Mazda
-        Mazda Mazda Mazda
-        Mazda Mazda Mazda`,
-        price: 10000000
-    },
-    {
-        brand: 'Mazda',
-        model: 'RX8',
-        additionalParams: `Mazda Mazda Mazda
-        Mazda Mazda Mazda
-        Mazda Mazda Mazda`,
-        price: 10000000
-    }
-];
 class CarsTab extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isLoading: true,
-            cars: []
+            cars: [],
+            displayedCars: [],
+            searchValue: ''
         }
+        this.searchInputRef = React.createRef();
+    }
+
+    applyFilterData = () => {
+        const { searchValue, cars } = this.state;
+        if (searchValue) {
+            const displayedCars = cars.filter(car => {
+                console.log(`${car.Brand.toUpperCase()} ${car.Model.toUpperCase()}`);
+                console.log(`${car.Brand.toUpperCase()} ${car.Model.toUpperCase()}`.includes(searchValue.toUpperCase()));
+                return `${car.Brand.toUpperCase()} ${car.Model.toUpperCase()}`.includes(searchValue.toUpperCase());
+            });
+            this.setState({ displayedCars });
+        } else {
+            this.setState({ displayedCars: cars });
+        }
+        
+    }
+
+    onSearchClick = () => {
+        this.setState({ searchValue: this.searchInputRef.current.value });
+        this.applyFilterData();
     }
 
     getAutos = () => {
@@ -59,6 +55,7 @@ class CarsTab extends Component {
         .then(r => r.json())
         .then(data => {
             this.setState({cars: data});
+            this.applyFilterData();
             this.setState({isLoading: false});
         });
     }
@@ -88,12 +85,12 @@ class CarsTab extends Component {
         <Col sm="12">
           <Row className="item">
           <InputGroup>
-            <Input placeholder="Enter word to search auto by brand"/>
-            <InputGroupAddon addonType="append"><Button>Search</Button></InputGroupAddon>
+            <input className="form-control" ref={this.searchInputRef} placeholder="Enter word to search auto by brand"/>
+            <InputGroupAddon addonType="append"><Button onClick={this.onSearchClick}>Search</Button></InputGroupAddon>
           </InputGroup>
           </Row>
           <Row>
-              {state.cars.map(elem => (
+              {state.displayedCars.map(elem => (
               <Col sm="12" key={`${elem.Brand}${elem.Model}`}>
                   <Card body className="item">
                     <CardTitle>{`${elem.Brand} ${elem.Model}`}</CardTitle>
