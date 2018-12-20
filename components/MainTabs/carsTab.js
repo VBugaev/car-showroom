@@ -29,8 +29,26 @@ class CarsTab extends Component {
         this.searchInputRef = React.createRef();
     }
 
-    applyFilterData = () => {
+    applyFilterData = (value) => {
+        const { cars } = this.state;
+        this.setState(() => {
+            return { searchValue: value };
+        });
+        if (value) {
+            const displayedCars = cars.filter(car => {
+                console.log(`${car.Brand.toUpperCase()} ${car.Model.toUpperCase()}`);
+                console.log(`${car.Brand.toUpperCase()} ${car.Model.toUpperCase()}`.includes(value.toUpperCase()));
+                return `${car.Brand.toUpperCase()} ${car.Model.toUpperCase()}`.includes(value.toUpperCase());
+            });
+            this.setState({ displayedCars });
+        } else {
+            this.setState({ displayedCars: cars });
+        }   
+    }
+
+    applyFilterDataOnChange = () => {
         const { searchValue, cars } = this.state;
+        
         if (searchValue) {
             const displayedCars = cars.filter(car => {
                 console.log(`${car.Brand.toUpperCase()} ${car.Model.toUpperCase()}`);
@@ -40,13 +58,11 @@ class CarsTab extends Component {
             this.setState({ displayedCars });
         } else {
             this.setState({ displayedCars: cars });
-        }
-        
+        }   
     }
 
     onSearchClick = () => {
-        this.setState({ searchValue: this.searchInputRef.current.value });
-        this.applyFilterData();
+        this.applyFilterData(this.searchInputRef.current.value);
     }
 
     getAutos = () => {
@@ -55,7 +71,7 @@ class CarsTab extends Component {
         .then(r => r.json())
         .then(data => {
             this.setState({cars: data});
-            this.applyFilterData();
+            this.applyFilterDataOnChange();
             this.setState({isLoading: false});
         });
     }
