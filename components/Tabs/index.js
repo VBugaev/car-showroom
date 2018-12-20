@@ -2,6 +2,8 @@ import React from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
 import CarsTab from '../MainTabs/carsTab.js';
+import OrdersTab from '../MainTabs/ordersTab.js';
+import TestDrivesTab from '../MainTabs/testDrivesTab.js';
 
 export default class Tabs extends React.Component {
     constructor(props) {
@@ -22,7 +24,7 @@ export default class Tabs extends React.Component {
     }
     render() {
       return (
-        <Col sm="12">
+        <Col sm="12" style={{alignSelf: "stretch"}}>
           <Nav tabs>
             <NavItem>
               <NavLink
@@ -51,8 +53,8 @@ export default class Tabs extends React.Component {
           </Nav>
           <TabContent activeTab={this.state.activeTab}>
             <CarsTab tabId="1"/>
-            <CarsTab tabId="2"/>
-            <CarsTab tabId="3"/>
+            <OrdersTab tabId="2"/>
+            <TestDrivesTab tabId="3"/>
           </TabContent>
         </Col>
       );

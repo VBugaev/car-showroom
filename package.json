@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "nodemon ./server/server.js",
     "build": "next build",
     "start": "next start"
   },
@@ -55,6 +55,7 @@
     "redux-form": "^7.4.2",
     "redux-thunk": "^2.3.0",
     "tedious": "^2.6.4",
+    "unfetch": "^4.0.1",
     "uuid": "^3.3.2"
   }
 }

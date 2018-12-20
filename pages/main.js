@@ -23,7 +23,7 @@ export default class extends React.Component {
                       <Button className="user-section-btn">Manage entities</Button>
                     </Card>
                 </Col>
-                <Col md="9" className="main-page-section">
+                <Col md="9" className="main-page-section" style={{display: "flex"}}>
                     <Tabs />
                 </Col>
             </Layout>

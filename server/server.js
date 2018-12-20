@@ -4,10 +4,27 @@ const next = require('next')
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
+const cors = require('cors');
+const helmet = require('helmet');
+const bodyParser = require('body-parser');
 
+require('./dbConfig.js');
 app.prepare()
 .then(() => {
   const server = express()
+  const router = require('express').Router();
+
+  server.use(cors());
+  server.use(helmet());
+  server.use(bodyParser.json());
+  server.use(bodyParser.urlencoded({
+  extended: false
+  }));
+
+  require('./clientsAPI')(router);
+  require('./autosAPI')(router);
+
+  server.use('/api', router);
 
   server.get('/', (req, res) => {
     app.render(req, res, '/login');

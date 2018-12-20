@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, FormGroup, Input, Button } from 'reactstrap'
 import Link from 'next/link';
 import { ClipLoader } from 'react-spinners';
 
-import Router from 'next/router';
+import Spinner from '../components/Spinner';
 
 import '../pageStyles/login.css';
 
@@ -33,14 +33,7 @@ export default class extends Component {
 
         return isLoading ? (
             <Container className="page-wrapper d-flex">
-                <div className="m-auto">
-                    <ClipLoader
-                        sizeUnit="px"
-                        size={100}
-                        color={'#000000'}
-                        loading={isLoading}
-                    />
-                </div>
+                <Spinner isLoading={isLoading} />
             </Container>
         ) : (<Container className="page-wrapper">
             <Row className="login-form-wrapper">
