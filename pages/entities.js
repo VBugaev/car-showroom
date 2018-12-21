@@ -10,15 +10,15 @@ import AutosForm from '../components/Forms/autosForm';
 
 class EntitiesPage extends Component {
     autosSubmit = values => {
-        // fetch('api/autos', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(values)
-        // }).then( r => {
-        //     console.log('success!');
-        //   })
+        fetch('api/autos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        }).then( r => {
+            console.log('success!');
+          })
         console.log(values);
     }
 

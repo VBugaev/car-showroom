@@ -47,6 +47,44 @@ const createAutoParams = async (data, id) => {
     }
 };
 
+const createAutoAdditionalParams = async (data, id) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('AutoId', sql.Int, id)
+        .input('WindowRaisers', sql.NVarChar(50), data.windowRaisers ? data.windowRaisers : null)
+        .input('ParkingSensors', sql.Bit, data.hasParkingSensors)
+        .input('RearViewCamera', sql.Bit, data.hasRearViewCamera)
+        .input('HeatedSteeringWheel', sql.Bit, data.hasHeatedSteeringWheel)
+        .input('WheelDisks', sql.NVarChar(50), data.wheelDisks ? data.wheelDisks : null)
+        .input('AdaptiveHeadlights', sql.Bit, data.hasAdaptiveHeadlights)
+        .input('CabinMaterial', sql.NVarChar(50), data.cabinMaterial ? data.cabinMaterial : null)
+        .execute('CreateAdditionalParams');
+        return result;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const createAutoAdditionalParamsPrices = async (data, id) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('AutoId', sql.Int, id)
+        .input('WindowRaisers', sql.BigInt, data.windowRaisers ? +data.windowRaisersPrice : null)
+        .input('ParkingSensors', sql.BigInt, data.hasParkingSensors ? +data.parkingSensorsPrice : null)
+        .input('RearViewCamera', sql.BigInt, data.hasRearViewCamera ? +data.rearViewCameraPrice : null)
+        .input('HeatedSteeringWheel', sql.BigInt, data.hasHeatedSteeringWheel ? +data.heatedSteeringWheelPrice : null)
+        .input('WheelDisks', sql.BigInt, data.wheelDisks ? +data.wheelDisksPrice : null)
+        .input('AdaptiveHeadlights', sql.BigInt, data.hasAdaptiveHeadlights ? +data.adaptiveHeadlightsPrice : null)
+        .input('CabinMaterial', sql.BigInt, data.cabinMaterial ? +data.cabinMaterialPrice : null)
+        .execute('CreateAdditionalParamsPrices');
+        return result;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const deleteAuto = async (id) => {
     try {
         let connectedPool = await pool;
@@ -85,6 +123,8 @@ module.exports = (router) => {
         try {
             const result = await createAuto(req.body);
             await createAutoParams(req.body, result.Id);
+            await createAutoAdditionalParams(req.body, result.Id);
+            await createAutoAdditionalParamsPrices(req.body, result.Id);
             res.send(result);
         } catch (error) {
             res.status(500).send(err);

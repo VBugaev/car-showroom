@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 import moment from 'moment';
+import { connect } from 'react-redux';
 
-import { FormGroup, Button, Label, Input } from 'reactstrap';
+import { FormGroup, Button, Label, Input, Col } from 'reactstrap';
 
 import { FormDatePicker, FormInput, FormCheckbox } from '../FormComponents';
 
 const DatePickerWithTime = (props) => {
-    const startDate = moment(Date.now());
+    const startDate = moment(Date.now()).add(1, 'd');
     const endDate = startDate.clone().add(30, 'd');
     const parsedStartDate = startDate.toDate();
     const parsedEndDate = endDate.toDate();
     const startTime = new Date;
     const endTime = new Date;
-    startTime.setHours(startDate.hour());
+    startTime.setHours(10);
     endTime.setHours(20);
     return (<FormDatePicker
         showTimeSelect
@@ -54,17 +55,21 @@ class CountriesSelect extends Component {
 }
 
 const AutosForm = props => {
-    const { handleSubmit } = props;
+    const { handleSubmit, 
+        windowRaisers,
+        cabinMaterial,
+        hasAdaptiveHeadlights,
+        wheelDisks,
+        hasHeatedSteeringWheel,
+        hasRearViewCamera,
+        hasParkingSensors } = props;
+
     return (
         <form method="POST" onSubmit={handleSubmit}>
-            <h1 className="display-4 mb-4">Create essential auto data:</h1>
+            <h1 className="display-4 mb-4 mt-4">Create essential auto data</h1>
             <FormGroup>
                 <Label>Brand</Label>
                 <Field name="brand" component={FormInput} type="text" />
-            </FormGroup>
-            <FormGroup>
-                <Label className="mr-5">Date</Label>
-                <Field name="date" component={DatePickerWithTime} type="text" />
             </FormGroup>
             <FormGroup>
                 <Label>Model</Label>
@@ -110,11 +115,108 @@ const AutosForm = props => {
                 <Label>Max speed</Label>
                 <Field name="maxSpeed" component={FormInput} />
             </FormGroup>
-            <Button className="user-section-btn">Create auto</Button>
+            <h5>Create additional params and prices</h5>
+            <FormGroup style={{ marginBottom: '10px' }} row>
+                <Label sm={3}>
+                    Window raisers
+                </Label>               
+                <Col sm={4}>
+                    <Field name="windowRaisers" component={FormInput} />
+                </Col>
+                <Col sm={1}>
+                    Price
+                </Col>
+                <Col sm={2}>
+                    <Field name="windowRaisersPrice" component={FormInput}
+                     disabled={!windowRaisers} />
+                </Col>
+            </FormGroup>
+            <FormGroup check row>
+                <Label check sm={4}>
+                    <Field name="hasParkingSensors" component={FormCheckbox} />{' '}
+                    Parking sensors
+                </Label>
+                <Col sm={5}>
+                    <Field name="parkingSensorsPrice" component={FormInput} disabled={!hasParkingSensors} />
+                </Col>
+            </FormGroup>
+            <FormGroup check row>
+                <Label check sm={4}>
+                    <Field name="hasRearViewCamera" component={FormCheckbox} />{' '}
+                    Rear-view camera
+                </Label>
+                <Col sm={5}>
+                    <Field name="rearViewCameraPrice" component={FormInput} disabled={!hasRearViewCamera} />
+                </Col>
+            </FormGroup>
+            <FormGroup  style={{ marginBottom: '10px' }} check row>
+                <Label check sm={4}>
+                    <Field name="hasHeatedSteeringWheel" component={FormCheckbox} />{' '}
+                    Heated steering wheel
+                </Label>
+                <Col sm={5}>
+                    <Field name="heatedSteeringWheelPrice" component={FormInput} disabled={!hasHeatedSteeringWheel} />
+                </Col>
+            </FormGroup>
+            <FormGroup style={{ marginBottom: '10px' }} row>
+                <Label sm={3}>
+                    Wheel disks
+                </Label>               
+                <Col sm={4}>
+                    <Field name="wheelDisks" component={FormInput} />
+                </Col>
+                <Col sm={1}>
+                    Price
+                </Col>
+                <Col sm={2}>
+                    <Field name="wheelDisksPrice" component={FormInput}
+                     disabled={!wheelDisks} />
+                </Col>
+            </FormGroup>
+            <FormGroup style={{ marginBottom: '10px' }} check row>
+                <Label check sm={4}>
+                    <Field name="hasAdaptiveHeadlights" component={FormCheckbox} />{' '}
+                    Adaptive Headlights
+                </Label>
+                <Col sm={5}>
+                    <Field name="adaptiveHeadlightsPrice" component={FormInput} disabled={!hasAdaptiveHeadlights} />
+                </Col>
+            </FormGroup>
+            <FormGroup className="mb-5" row>
+                <Label sm={3}>
+                    Cabin material
+                </Label>               
+                <Col sm={4}>
+                    <Field name="cabinMaterial" component={FormInput} />
+                </Col>
+                <Col sm={1}>
+                    Price
+                </Col>
+                <Col sm={2}>
+                    <Field name="cabinMaterialPrice" component={FormInput}
+                     disabled={!cabinMaterial} />
+                </Col>
+            </FormGroup> 
+            <Button className="user-section-btn mb-5">Create auto</Button>
         </form>
     );
 };
 
-export default reduxForm({
+const ReduxAutosForm = reduxForm({
     form: 'autos'
 })(AutosForm);
+
+const selector = formValueSelector('autos');
+
+export default connect(
+    state => ({
+        windowRaisers: selector(state, 'windowRaisers'),
+        cabinMaterial: selector(state, 'cabinMaterial'),
+        hasAdaptiveHeadlights: selector(state, 'hasAdaptiveHeadlights'),
+        wheelDisks: selector(state, 'wheelDisks'),
+        hasHeatedSteeringWheel: selector(state, 'hasHeatedSteeringWheel'),
+        hasRearViewCamera: selector(state, 'hasRearViewCamera'),
+        hasParkingSensors: selector(state, 'hasParkingSensors')
+    })
+)(ReduxAutosForm);
+

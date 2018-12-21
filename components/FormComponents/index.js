@@ -12,13 +12,17 @@ export const FormDatePicker = (props) => (
         dateFormat={props.showTimeSelect ? 'd/MM/YYYY, HH:00' : 'DD/MM/YYYY'}
         timeFormat={props.showTimeSelect ? 'HH:mm' : null}
         timeIntervals={props.timeIntervals || 60}
-        minDate = {props.minDate}
-        maxDate = {props.maxDate}
-        minTime = {props.minTime}
-        maxTime = {props.maxTime}
+        minDate={props.minDate}
+        maxDate={props.maxDate}
+        minTime={props.minTime}
+        maxTime={props.maxTime}
     />
 );
 
 export const FormCheckbox = ({ input }) => (<Input {...input} type="checkbox" />);
 
-export const FormInput = (field) => (<Input {...field.input} autoComplete="off" />);
+export const FormInput = ({ input, disabled, className }) => (
+    <Input {...input}
+        disabled={disabled}
+        className={className || ''}
+        autoComplete="off" />);
