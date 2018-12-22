@@ -12,6 +12,7 @@ import {
 import './tabs.css';
 import fetch from 'unfetch';
 import Spinner from '../Spinner';
+import Link from 'next/link';
 
 class CarsTab extends Component {
     constructor(props) {
@@ -115,7 +116,7 @@ class CarsTab extends Component {
                     Air conditioning: ${elem.AirConditioning}; Max speed: ${elem.MaxSpeed}`}</CardText>
                     <CardText>Price: {`${elem.Price} rubles`}</CardText>
                     <Row>
-                        {(isUser || isManager) && <Col sm="3"><Button>Buy</Button></Col>}
+                        {(isUser || isManager) && <Col sm="3"><Link as="/order/create" href={`/order?autoid=${elem.Id}&userid=${props.userInfo.id}&autoname=${`${elem.Brand} ${elem.Model}`}`}><Button>Buy</Button></Link></Col>}
                         {(isUser || isManager) && <Col sm="3"><Button>Register on test drive</Button></Col>}
                         {isAdmin && <Col sm="3"><Button onClick={() => this.deleteAuto(elem.Id)}>Delete car</Button></Col>}
                     </Row>

@@ -16,6 +16,7 @@ export const FormDatePicker = (props) => (
         maxDate={props.maxDate}
         minTime={props.minTime}
         maxTime={props.maxTime}
+        placeholder={props.placeholder}
     />
 );
 

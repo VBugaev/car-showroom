@@ -50,6 +50,7 @@
     "react-dom": "^16.5.2",
     "react-redux": "^5.1.1",
     "react-spinners": "^0.4.7",
+    "react-table": "^6.8.6",
     "reactstrap": "^6.5.0",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.2",

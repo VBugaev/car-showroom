@@ -37,12 +37,12 @@ export default class extends React.Component {
     }
 
     render() {
-        const { name, surname, phone, isDelivery, role, street, isLoading } = this.state;
+        const { id, name, surname, phone, isDelivery, role, street, isLoading } = this.state;
         const isAdmin = role === 'Admin';
         const isManager = role === 'Manager';
         const isUser = role === 'User';
         const userInfo = {
-            name, surname, phone, isDelivery, role, street
+           id, name, surname, phone, isDelivery, role, street
         };
         return isLoading ? (
             <Container className="page-wrapper d-flex">

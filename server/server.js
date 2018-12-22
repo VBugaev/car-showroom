@@ -39,6 +39,10 @@ app.prepare()
   server.get('/entities', (req, res) => {
     app.render(req, res, '/entities');
   })
+  
+  server.get('/order/create', (req, res) => {
+    app.render(req, res, '/order', req.query);
+  })
 
   server.get('*', (req, res) => {
     return handle(req, res)

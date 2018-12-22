@@ -12,6 +12,20 @@ const getAllAutos = async () => {
     }
 };
 
+const getAutoById = async (id) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('Id', sql.Int, +id)
+        .execute('GetAutoById');
+        console.log(result.recordset[0]);
+        return result.recordset[0];
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 const createAuto = async (data) => {
     try {
         let connectedPool = await pool;
@@ -87,11 +101,35 @@ const createAutoAdditionalParamsPrices = async (data, id) => {
     }
 };
 
+const getAdditionalParams = async (id) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('AutoId', sql.Int, +id)
+        .execute('GetAdditionalParamsByAutoId');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getAdditionalParamsPrices = async (id) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('AutoId', sql.Int, +id)
+        .execute('GetAdditionalParamsPricesById');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const deleteAuto = async (id) => {
     try {
         let connectedPool = await pool;
         const result = await connectedPool.request()
-        .input('Id', sql.Int, id)
+        .input('Id', sql.Int, +id)
         .execute('DeleteAuto');
         return result;
     } catch (error) {
@@ -113,13 +151,28 @@ const getAllCountries = async () => {
 }
 
 module.exports = (router) => {
+    router.route('/autoparams')
+    .get(async (req, res) => {
+        try {
+            const resultParams = await getAdditionalParams(req.query.id);
+            const resultPrices = await getAdditionalParamsPrices(req.query.id);
+            const autoData = await getAutoById(req.query.id);
+            res.send({
+                autoData,
+                resultParams,
+                resultPrices
+            });
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    })
     router.route('/autos')
     .get(async (req, res) => {
         try {
             const result = await getAllAutos();
             res.send(result);
         } catch (error) {
-            res.status(500).send(err);
+            res.status(500).send(error);
         }
     })
     .post(async (req, res) => {

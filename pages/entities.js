@@ -19,6 +19,9 @@ class EntitiesPage extends Component {
         }).then( r => {
             console.log('success!');
           })
+          .catch(err => {
+              console.log(err);
+          })
         console.log(values);
     }
 
