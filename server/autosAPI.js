@@ -1,5 +1,6 @@
 let pool = require('./dbConfig.js');
 let sql = require('mssql');
+let moment = require('moment');
 
 const getAllAutos = async () => {
     try {
@@ -18,10 +19,8 @@ const getAutoById = async (id) => {
         const result = await connectedPool.request()
         .input('Id', sql.Int, +id)
         .execute('GetAutoById');
-        console.log(result.recordset[0]);
         return result.recordset[0];
     } catch (error) {
-        console.log(error);
         throw error;
     }
 };
@@ -76,7 +75,6 @@ const createAutoAdditionalParams = async (data, id) => {
         .execute('CreateAdditionalParams');
         return result;
     } catch (error) {
-        console.log(error);
         throw error;
     }
 };
@@ -96,10 +94,60 @@ const createAutoAdditionalParamsPrices = async (data, id) => {
         .execute('CreateAdditionalParamsPrices');
         return result;
     } catch (error) {
+        throw error;
+    }
+};
+
+const createOrderParams = async (data, id) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('Id', sql.Int, id)
+        .input('WindowRaisers', sql.Bit, data.windowRaisers ? data.windowRaisers : null)
+        .input('ParkingSensors', sql.Bit, data.parkingSensors ? data.parkingSensors : null)
+        .input('RearViewCamera', sql.Bit, data.rearViewCamera ? data.rearViewCamera : null)
+        .input('HeatedSteeringWheel', sql.Bit, data.heatedSteeringWheel ? data.heatedSteeringWheel : null)
+        .input('WheelDisks', sql.Bit, data.wheelDisks ? data.wheelDisks : null)
+        .input('AdaptiveHeadlights', sql.Bit, data.adaptiveHeadlights ? data.adaptiveHeadlights : null)
+        .input('CabinMaterial', sql.Bit, data.cabinMaterial ? data.cabinMaterial : null)
+        .execute('CreateOrderParams');
+        return result;
+    } catch (error) {
         console.log(error);
         throw error;
     }
 };
+
+const getStatusByTitle = async (title) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('Title', sql.NVarChar(50), title)
+        .execute('GetStatusByTitle');
+        return result.recordset[0];
+    } catch (error) {
+        throw error;
+    }
+};
+
+const createOrder = async (data) => {
+    try {
+        let connectedPool = await pool;
+
+        const statusResult = await getStatusByTitle('Pending');
+        const result = await connectedPool.request()
+        .input('UserId', sql.Int, +data.userid)
+        .input('AutoId', sql.Int, +data.autoid)
+        .input('StatusId', sql.Int, statusResult.Id)
+        .input('Date', sql.DateTimeOffset(7), moment(data.date).toDate())
+        .input('TotalPrice', sql.BigInt, data.totalPrice)
+        .execute('CreateOrder');
+        return result;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 
 const getAdditionalParams = async (id) => {
     try {
@@ -133,7 +181,6 @@ const deleteAuto = async (id) => {
         .execute('DeleteAuto');
         return result;
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }
@@ -163,7 +210,17 @@ module.exports = (router) => {
                 resultPrices
             });
         } catch (error) {
-            res.status(500).send(error);
+            throw error;
+        }
+    })
+    router.route('/order')
+    .post(async (req, res) => {
+        try {
+            const result = await createOrder(req.body);
+            await createOrderParams(req.body, result.recordset[0].Id);
+            res.send(result);
+        } catch (error) {
+            res.status(500).send(err);
         }
     })
     router.route('/autos')

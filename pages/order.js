@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Router from 'next/router';
 import fetch from 'unfetch';
 
 import { Container, Row, Col, Form, FormGroup, Input, Button, Label } from 'reactstrap';
@@ -6,51 +7,63 @@ import { Container, Row, Col, Form, FormGroup, Input, Button, Label } from 'reac
 import Layout from '../components/Layout';
 
 import OrdersForm from '../components/Forms/ordersForm';
+import moment from 'moment';
 
 import Spinner from '../components/Spinner';
 
 class OrdersPage extends Component {
     static async getInitialProps(context) {
         const { query } = context;
-        console.log(query);
         return { query };
     }
     constructor(props) {
         super(props);
         this.state = {
-            params: [],
-            prices: [],
+            params: {},
+            prices: {},
             isLoading: true,
             totalPrice: 0
         };
     }
 
+
+
     componentDidMount = () => {
         fetch(`http://localhost:3000/api/autoparams?id=${this.props.query.autoid}`)
             .then(r => r.json())
             .then(data => {
-                console.log(data);
                 this.setState({
-                    totalPrice: +data.autoData.price,
+                    totalPrice: +data.autoData.Price,
                     params: data.resultParams[0],
                     prices: data.resultPrices[0],
                     isLoading: false
                 })
             })
+        console.log(this.props);
     }
 
-    // orderSubmit = values => {
-    //     fetch('api/autos', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(values)
-    //     }).then( r => {
-    //         console.log('success!');
-    //       })
-    //     console.log(values);
-    // }
+    orderSubmit = values => {
+        const { query } = this.props;
+        fetch(`http://localhost:3000/api/order`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ...values,
+                userid: query.userid,
+                autoid: query.autoid,
+                totalPrice: sessionStorage.getItem('price')
+            })
+        }).then(r => {
+            sessionStorage.clear();
+        })
+            .catch(err => {
+                console.log(err);
+            })
+        console.log(values.date);
+
+    }
 
     render() {
         const { query, isLoading } = this.props;
@@ -68,7 +81,11 @@ class OrdersPage extends Component {
                         </Row>
                         <Row>
                             <Col sm="12">
-                                <OrdersForm params={this.state.params} prices={this.state.prices} />
+                                <OrdersForm onPriceChange={this.onPriceChange}
+                                    onSubmit={this.orderSubmit}
+                                    params={this.state.params}
+                                    prices={this.state.prices}
+                                    totalPrice={this.state.totalPrice} />
                             </Col>
                         </Row>
                     </Container>

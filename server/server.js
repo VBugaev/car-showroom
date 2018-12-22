@@ -40,7 +40,7 @@ app.prepare()
     app.render(req, res, '/entities');
   })
   
-  server.get('/order/create', (req, res) => {
+  server.get('/order/new', (req, res) => {
     app.render(req, res, '/order', req.query);
   })
 
