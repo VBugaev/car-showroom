@@ -24,11 +24,16 @@ const register = async (data) => {
         .input('Surname', sql.NVarChar(50), data.surname)
         .input('Password', sql.NVarChar(sql.MAX), data.password)
         .input('RoleId', sql.Int, userRoleResult.recordset[0].Id)
-        .input('DeliveryType', sql.Bit, data.deliveryType)
+        .input('DeliveryType', sql.Bit, data.isDelivery)
         .input('Patronymic', sql.NVarChar(50), data.patronymic)
         .input('StreetId', sql.Int, data.streetId)
         .input('Phone', sql.NVarChar(20), data.phone)
         .execute('CreateClient');
+
+        await connectedPool.request()
+        .input('UserId', sql.Int, result.recordset[0].Id)
+        .input('Password', sql.NVarChar(sql.MAX), data.password)
+        .execute('SetPassword');
         return result.recordset[0];
     } catch (error) {
         throw error;

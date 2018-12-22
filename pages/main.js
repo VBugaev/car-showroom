@@ -37,10 +37,13 @@ export default class extends React.Component {
     }
 
     render() {
-        const { name, surname, phone, isDelivery, role, street, isLoading} = this.state;
+        const { name, surname, phone, isDelivery, role, street, isLoading } = this.state;
         const isAdmin = role === 'Admin';
         const isManager = role === 'Manager';
         const isUser = role === 'User';
+        const userInfo = {
+            name, surname, phone, isDelivery, role, street
+        };
         return isLoading ? (
             <Container className="page-wrapper d-flex">
                 <Spinner isLoading={isLoading} />
@@ -67,7 +70,7 @@ export default class extends React.Component {
                     </Card>
                 </Col>
                 <Col md="9" className="main-page-section" style={{ display: "flex" }}>
-                    <Tabs />
+                    <Tabs userInfo={userInfo} />
                 </Col>
             </Layout>
         );

@@ -62,6 +62,7 @@ const createAutoAdditionalParams = async (data, id) => {
         .execute('CreateAdditionalParams');
         return result;
     } catch (error) {
+        console.log(error);
         throw error;
     }
 };
@@ -81,6 +82,7 @@ const createAutoAdditionalParamsPrices = async (data, id) => {
         .execute('CreateAdditionalParamsPrices');
         return result;
     } catch (error) {
+        console.log(error);
         throw error;
     }
 };
@@ -105,6 +107,7 @@ const getAllCountries = async () => {
         .execute('GetAllCountries');
         return result.recordset;
     } catch (error) {
+        
         throw error;
     }
 }

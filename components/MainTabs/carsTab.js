@@ -86,7 +86,9 @@ class CarsTab extends Component {
     
     render() {
         const { props, state } = this;
-
+        const isAdmin = props.userInfo.role === 'Admin';
+        const isManager = props.userInfo.role === 'Manager';
+        const isUser = props.userInfo.role === 'User';
         return state.isLoading ? 
         (<div style={{position: "absolute", left: 0, right: 0, bottom: 0, top: 0}}>
             <div style={{ position: "absolute", transform:"(-50%, -50%)", left:"50%", top: "40%" }}>
@@ -113,9 +115,9 @@ class CarsTab extends Component {
                     Air conditioning: ${elem.AirConditioning}; Max speed: ${elem.MaxSpeed}`}</CardText>
                     <CardText>Price: {`${elem.Price} rubles`}</CardText>
                     <Row>
-                        <Col sm="3"><Button>Buy</Button></Col>
-                        <Col sm="3"><Button>Register on test drive</Button></Col>
-                        <Col sm="3"><Button onClick={() => this.deleteAuto(elem.Id)}>Delete car</Button></Col>
+                        {(isUser || isManager) && <Col sm="3"><Button>Buy</Button></Col>}
+                        {(isUser || isManager) && <Col sm="3"><Button>Register on test drive</Button></Col>}
+                        {isAdmin && <Col sm="3"><Button onClick={() => this.deleteAuto(elem.Id)}>Delete car</Button></Col>}
                     </Row>
                   </Card>
               </Col>

@@ -52,7 +52,7 @@ export default class Tabs extends React.Component {
             </NavItem>
           </Nav>
           <TabContent activeTab={this.state.activeTab}>
-            <CarsTab tabId="1"/>
+            <CarsTab userInfo={this.props.userInfo} tabId="1"/>
             <OrdersTab tabId="2"/>
             <TestDrivesTab tabId="3"/>
           </TabContent>
