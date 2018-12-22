@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Form, FormGroup, Input, Button } from 'reactstrap';
+import { Container, Row, Col, Alert } from 'reactstrap';
 import Link from 'next/link';
-import { ClipLoader } from 'react-spinners';
+import Router from 'next/router';
 
 import Spinner from '../components/Spinner';
 
 import '../pageStyles/login.css';
+
+import LoginForm from '../components/Forms/loginForm';
 
 
 export default class extends Component {
@@ -13,15 +15,43 @@ export default class extends Component {
         return { isLoading: true };
     }
 
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
-            isLoading: true
+            isLoading: true,
+            error: ''
         }
     }
 
+    loginSubmit = values => {
+        fetch('api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        }).then(r => r.json())
+            .then(data => {
+                if (data.Id) {
+                    localStorage.clear();
+                    localStorage.setItem('id', data.Id);
+                    localStorage.setItem('name', data.Name || ' ');
+                    localStorage.setItem('surname', data.Surname || ' ');
+                    localStorage.setItem('patronymic', data.Patronymic || ' ');
+                    localStorage.setItem('phone', data.Phone);
+                    localStorage.setItem('deliveryType', data.DeliveryType);
+                    localStorage.setItem('role', data.RoleTitle);
+                    localStorage.setItem('street', data.StreetTitle || ' ');
+                    this.setState({ error: '' });
+                    Router.push('/');
+                } else {
+                    this.setState({ error: data.error });
+                }
+            })
+    }
+
     componentDidMount() {
-        if (localStorage.getItem('user')) {
+        if (localStorage.getItem('id')) {
             window.location.replace('/main');
         } else {
             this.setState({ isLoading: false });
@@ -29,7 +59,7 @@ export default class extends Component {
     }
 
     render() {
-        const { isLoading } = this.state;
+        const { isLoading, error } = this.state;
 
         return isLoading ? (
             <Container className="page-wrapper d-flex">
@@ -39,21 +69,10 @@ export default class extends Component {
             <Row className="login-form-wrapper">
                 <Col className="d-flex flex-column justify-content-center" sm="12" md={{ size: 4, offset: 4 }}>
                     <h1 className="display-4 align-middle text-center mb-5">Car showroom</h1>
-                    <Form>
-                        <FormGroup>
-                            <Input type="phone" name="phone" id="loginPhone" placeholder="Enter phone" />
-                        </FormGroup>
-                        <FormGroup>
-                            <Input type="password" name="password" id="loginPassword" placeholder="Enter password" />
-                        </FormGroup>
-                        <Link href="/main">
-                            <a className="btn btn-outline-primary btn-lg btn-block">Sign in</a>
-                        </Link>
-                        {/* <Button outline color="primary" size="lg" block>Sign in</Button> */}
-                        <Link href="/register">
-                            <a className="btn btn-outline-success btn-lg btn-block">Sign up</a>
-                        </Link>
-                    </Form>
+                    {
+                        error && <Alert color="danger">{error}</Alert>
+                    }
+                    <LoginForm onSubmit={this.loginSubmit} />
                 </Col>
             </Row>
         </Container>);

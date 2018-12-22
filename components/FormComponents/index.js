@@ -21,8 +21,10 @@ export const FormDatePicker = (props) => (
 
 export const FormCheckbox = ({ input }) => (<Input {...input} type="checkbox" />);
 
-export const FormInput = ({ input, disabled, className }) => (
+export const FormInput = ({ input, disabled, className, placeholder, type }) => (
     <Input {...input}
         disabled={disabled}
+        placeholder={placeholder || ''}
         className={className || ''}
+        type={type || 'text'}
         autoComplete="off" />);
