@@ -13,8 +13,6 @@ const DatePickerWithTime = (props) => {
     const parsedEndDate = endDate.toDate();
     return (<FormDatePicker
         showTimeSelect
-        minDate={parsedStartDate}
-        maxDate={parsedEndDate}
         {...props}
     />);
 }

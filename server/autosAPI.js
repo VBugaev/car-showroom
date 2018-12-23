@@ -99,6 +99,7 @@ const createAutoAdditionalParamsPrices = async (data, id) => {
 };
 
 const createOrderParams = async (data, id) => {
+    console.log(data);
     try {
         let connectedPool = await pool;
         const result = await connectedPool.request()

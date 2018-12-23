@@ -44,6 +44,7 @@ class OrdersPage extends Component {
 
     orderSubmit = values => {
         const { query } = this.props;
+        console.log(values);
         fetch(`http://localhost:3000/api/order`, {
             method: 'POST',
             headers: {
