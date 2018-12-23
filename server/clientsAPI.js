@@ -12,9 +12,26 @@ const getAllClients = async () => {
     }
 };
 
+const getClientByPhone = async (phone) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('Phone', sql.NVarChar(20), phone)
+        .execute('GetClientByPhone');
+        return result.recordset[0];
+    } catch (error) {
+        throw error;
+    }
+}
+
 const register = async (data) => {
     try {
         let connectedPool = await pool;
+        const existedResult = await getClientByPhone(data.phone)
+        if (existedResult) {
+            return { error: 'This phone already registered' }
+        }
+
         const userRoleResult =  await connectedPool.request()
         .input('Title', sql.NVarChar(50), 'User')
         .execute('GetRoleByTitle');
@@ -26,7 +43,7 @@ const register = async (data) => {
         .input('RoleId', sql.Int, userRoleResult.recordset[0].Id)
         .input('DeliveryType', sql.Bit, data.isDelivery)
         .input('Patronymic', sql.NVarChar(50), data.patronymic)
-        .input('StreetId', sql.Int, data.streetId)
+        .input('StreetId', sql.Int, data.street)
         .input('Phone', sql.NVarChar(20), data.phone)
         .execute('CreateClient');
 

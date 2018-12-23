@@ -127,8 +127,7 @@ const AutosForm = props => {
                     Price
                 </Col>
                 <Col sm={2}>
-                    <Field name="windowRaisersPrice" component={FormInput}
-                     disabled={!windowRaisers} />
+                    {!!windowRaisers && <Field name="windowRaisersPrice" component={FormInput} />}
                 </Col>
             </FormGroup>
             <FormGroup check row>
@@ -137,7 +136,7 @@ const AutosForm = props => {
                     Parking sensors
                 </Label>
                 <Col sm={5}>
-                    <Field name="parkingSensorsPrice" component={FormInput} disabled={!hasParkingSensors} />
+                    { hasParkingSensors && <Field name="parkingSensorsPrice" component={FormInput} /> }
                 </Col>
             </FormGroup>
             <FormGroup check row>
@@ -146,7 +145,7 @@ const AutosForm = props => {
                     Rear-view camera
                 </Label>
                 <Col sm={5}>
-                    <Field name="rearViewCameraPrice" component={FormInput} disabled={!hasRearViewCamera} />
+                    { hasRearViewCamera && <Field name="rearViewCameraPrice" component={FormInput} />}
                 </Col>
             </FormGroup>
             <FormGroup  style={{ marginBottom: '10px' }} check row>
@@ -155,7 +154,7 @@ const AutosForm = props => {
                     Heated steering wheel
                 </Label>
                 <Col sm={5}>
-                    <Field name="heatedSteeringWheelPrice" component={FormInput} disabled={!hasHeatedSteeringWheel} />
+                   { hasHeatedSteeringWheel && <Field name="heatedSteeringWheelPrice" component={FormInput} />}
                 </Col>
             </FormGroup>
             <FormGroup style={{ marginBottom: '10px' }} row>
@@ -169,8 +168,7 @@ const AutosForm = props => {
                     Price
                 </Col>
                 <Col sm={2}>
-                    <Field name="wheelDisksPrice" component={FormInput}
-                     disabled={!wheelDisks} />
+                    { !!wheelDisks && <Field name="wheelDisksPrice" component={FormInput}/>}
                 </Col>
             </FormGroup>
             <FormGroup style={{ marginBottom: '10px' }} check row>
@@ -179,7 +177,7 @@ const AutosForm = props => {
                     Adaptive Headlights
                 </Label>
                 <Col sm={5}>
-                    <Field name="adaptiveHeadlightsPrice" component={FormInput} disabled={!hasAdaptiveHeadlights} />
+                    { hasAdaptiveHeadlights && <Field name="adaptiveHeadlightsPrice" component={FormInput} />}
                 </Col>
             </FormGroup>
             <FormGroup className="mb-5" row>
@@ -193,8 +191,7 @@ const AutosForm = props => {
                     Price
                 </Col>
                 <Col sm={2}>
-                    <Field name="cabinMaterialPrice" component={FormInput}
-                     disabled={!cabinMaterial} />
+                    { !!cabinMaterial && <Field name="cabinMaterialPrice" component={FormInput} />}
                 </Col>
             </FormGroup> 
             <Button className="user-section-btn mb-5">Create auto</Button>

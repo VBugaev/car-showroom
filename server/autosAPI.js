@@ -150,6 +150,17 @@ const createOrder = async (data) => {
     }
 }
 
+const getAllOrders = async () => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .execute('GetAllOrders');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const getAdditionalParams = async (id) => {
     try {
         let connectedPool = await pool;
@@ -193,12 +204,57 @@ const getAllCountries = async () => {
         .execute('GetAllCountries');
         return result.recordset;
     } catch (error) {
-        
+        throw error;
+    }
+}
+
+const getAllStreets = async () => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .execute('GetAllStreets');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const getAllStatuses = async () => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .execute('GetAllStatuses');
+        return result.recordset;
+    } catch (error) {
         throw error;
     }
 }
 
 module.exports = (router) => {
+    router.route('/stat')
+    .get(async (req, res) => {
+        try {
+            const resultParams = await getAdditionalParams(req.query.id);
+            const resultPrices = await getAdditionalParamsPrices(req.query.id);
+            const autoData = await getAutoById(req.query.id);
+            res.send({
+                autoData,
+                resultParams,
+                resultPrices
+            });
+        } catch (error) {
+            throw error;
+        }
+    })
+    router.route('/streets')
+    .get(async (req, res) => {
+        try {
+            const resultStreets = await getAllStreets();
+            res.send(resultStreets);
+        } catch (error) {
+            throw error;
+        }
+    })
     router.route('/autoparams')
     .get(async (req, res) => {
         try {
@@ -212,6 +268,26 @@ module.exports = (router) => {
             });
         } catch (error) {
             throw error;
+        }
+    })
+
+    router.route('/statuses')
+    .get(async (req, res) => {
+        try {
+            const result = await getAllStatuses();
+            res.send(result);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    })
+
+    router.route('/orders')
+    .get(async (req, res) => {
+        try {
+            const result = await getAllOrders();
+            res.send(result);
+        } catch (error) {
+            res.status(500).send(error);
         }
     })
     router.route('/order')

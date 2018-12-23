@@ -6,8 +6,8 @@ import { Input } from 'reactstrap';
 export const FormDatePicker = (props) => (
     <DatePicker
         className="form-control"
-        selected={props.input.value || null}
-        onChange={props.input.onChange}
+        selected={props.input && (props.input.value || null)}
+        onChange={props.input && props.input.onChange}
         showTimeSelect={props.showTimeSelect}
         dateFormat={props.showTimeSelect ? 'd/MM/YYYY, HH:00' : 'DD/MM/YYYY'}
         timeFormat={props.showTimeSelect ? 'HH:mm' : null}

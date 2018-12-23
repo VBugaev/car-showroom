@@ -4,6 +4,8 @@ import classnames from 'classnames';
 import CarsTab from '../MainTabs/carsTab.js';
 import OrdersTab from '../MainTabs/ordersTab.js';
 import TestDrivesTab from '../MainTabs/testDrivesTab.js';
+import ClientsTab from '../MainTabs/clientsTab.js';
+import StatisticsTab from '../MainTabs/statisticsTab';
 
 export default class Tabs extends React.Component {
     constructor(props) {
@@ -23,6 +25,8 @@ export default class Tabs extends React.Component {
       }
     }
     render() {
+      const isAdmin = this.props.userInfo.role === 'Admin';
+      const isManager = this.props.userInfo.role === 'Manager';
       return (
         <Col sm="12" style={{alignSelf: "stretch"}}>
           <Nav tabs>
@@ -50,11 +54,33 @@ export default class Tabs extends React.Component {
                 Test drives
               </NavLink>
             </NavItem>
+            { (isAdmin || isManager) && (<>
+              <NavItem>
+              <NavLink
+                className={classnames({ active: this.state.activeTab === '4' })}
+                onClick={() => { this.toggle('4'); }}
+              >
+                Clients
+              </NavLink>
+            </NavItem>
+            <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === '5' })}
+              onClick={() => { this.toggle('5'); }}
+            >
+              Statistics
+            </NavLink>
+            </NavItem>
+            </>)}
           </Nav>
           <TabContent activeTab={this.state.activeTab}>
             <CarsTab userInfo={this.props.userInfo} tabId="1"/>
-            <OrdersTab tabId="2"/>
-            <TestDrivesTab tabId="3"/>
+            <OrdersTab userInfo={this.props.userInfo} tabId="2"/>
+            <TestDrivesTab userInfo={this.props.userInfo} tabId="3"/>
+            { (isAdmin || isManager) && (<>
+            <ClientsTab userInfo={this.props.userInfo} tabId="4" />
+            <StatisticsTab tabId = "5" />
+            </>)}
           </TabContent>
         </Col>
       );

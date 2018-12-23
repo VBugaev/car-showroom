@@ -61,12 +61,10 @@ export default class extends React.Component {
                         <CardText> {`${phone}, ${role}`}</CardText>
                         <CardText> Delivery: {isDelivery ? ' Yes': ' No'}</CardText>
                         { street.trim() && (<CardText>Address: {street}</CardText>)}
-                        {isAdmin && (<><Button className="user-section-btn">Manage clients</Button>
-                            <Button className="user-section-btn">Manage orders</Button>
-                            <Button className="user-section-btn">Manage test drives</Button>
+                        {isAdmin && (
                             <Button className="user-section-btn" onClick={() => Router.push('/entities')}>
-                                Manage entities
-                        </Button></>)}
+                                Create auto
+                        </Button>)}
                     </Card>
                 </Col>
                 <Col md="9" className="main-page-section" style={{ display: "flex" }}>

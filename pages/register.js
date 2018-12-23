@@ -1,6 +1,6 @@
 import React from 'react';
 import Router from 'next/router';
-import { Container, Row, Col, Form, FormGroup, Input, Button } from 'reactstrap';
+import { Container, Row, Col, Form, FormGroup, Input, Button, Alert } from 'reactstrap';
 import '../pageStyles/login.css';
 import RegisterForm from '../components/Forms/registerForm';
 
@@ -39,11 +39,15 @@ export default class extends React.Component {
             })
     }
     render() {
+        const { error } = this.state;
         return (
             <Container className="login-page-wrapper">
                 <Row className="login-form-wrapper">
                     <Col className="d-flex flex-column justify-content-center" sm="12" md={{ size: 4, offset: 4 }}>
                         <h1 className="display-4 align-middle text-center mb-5">Sign up the client</h1>
+                        {
+                        error && <Alert color="danger">{error}</Alert>
+                        }
                         <RegisterForm onSubmit={this.registerSubmit}/>
                     </Col>
                 </Row>
