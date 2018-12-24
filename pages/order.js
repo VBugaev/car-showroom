@@ -58,6 +58,7 @@ class OrdersPage extends Component {
             })
         }).then(r => {
             sessionStorage.clear();
+            Router.push('/');
         })
             .catch(err => {
                 console.log(err);

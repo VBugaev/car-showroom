@@ -66,7 +66,7 @@ const AutosForm = props => {
 
     return (
         <form method="POST" onSubmit={handleSubmit}>
-            <h1 className="display-4 mb-4 mt-4">Create essential auto data</h1>
+            <h1 className="display-4 mb-4 mt-4">Create a car</h1>
             <FormGroup>
                 <Label>Brand</Label>
                 <Field name="brand" component={FormInput} type="text" />

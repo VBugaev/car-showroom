@@ -12,6 +12,17 @@ const getAllClients = async () => {
     }
 };
 
+const getAllRoles = async () => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .execute('GetAllRoles');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const getClientByPhone = async (phone) => {
     try {
         let connectedPool = await pool;
@@ -79,7 +90,18 @@ const login = async (data) => {
     }
 }
 
-
+const updateClient = async (updData) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('Id', sql.Int, updData.id)
+        .input('RoleId', sql.Int, updData.roleid)
+        .execute('UpdateClient');
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
 
 module.exports = (router) => {
     router.route('/login')
@@ -100,6 +122,16 @@ module.exports = (router) => {
             res.status(500).send(error);
         }
     })
+    router.route('/client')
+    .put(async (req, res) => {
+        try {
+            await updateClient(req.query);
+            res.status(200).send('Ok!');
+        } catch (error) {
+            console.log(error);
+            res.status(500).send(error);
+        }
+    })
     router.route('/clients')
     .get((req, res) => {
         getAllClients().then(result => {
@@ -109,4 +141,13 @@ module.exports = (router) => {
             res.status(500).send(err);
         })
     });
+    router.route('/roles')
+    .get(async (req, res) => {
+        try {
+            const result = await getAllRoles();
+            res.send(result);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    })
 }

@@ -4,11 +4,16 @@ import fetch from 'unfetch';
 import { Container, Row, Col, Form, FormGroup, Input, Button, Label } from 'reactstrap';
 
 import Layout from '../components/Layout';
+import Router from 'next/router';
 
 import AutosForm from '../components/Forms/autosForm';
 
 
 class EntitiesPage extends Component {
+    constructor(props) {
+        super(props);
+        
+    }
     autosSubmit = values => {
         fetch('api/autos', {
             method: 'POST',
@@ -16,9 +21,8 @@ class EntitiesPage extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(values)
-        }).then( r => {
-            console.log('success!');
-          })
+        }).then( r => r.json())
+          .then(data => Router.push('/'))
           .catch(err => {
               console.log(err);
           })

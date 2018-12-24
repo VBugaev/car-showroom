@@ -16,78 +16,38 @@ export class StatisticsTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            orders: [],
-            displayedStatuses: [],
-            isLoading: true,
-            minDate: null,
-            maxDate: null,
-            statusFilter: 'All'
+            totalPrice: null,
+            brandPrice: null
         }
     }
 
-    getOrders = () => {
-        this.setState({ isLoading: true });
-        fetch('http://localhost:3000/api/clients')
+    getStat = () => {
+        fetch('http://localhost:3000/api/stat')
             .then(r => r.json())
             .then(data => {
-                const updatedData = data.map(user => {
-                    
-                    return {
-                        name: `${user.Name} ${user.Surname}`,
-                        phone: `${user.Phone}`,
-                        delivery: `${user.DeliveryType ? 'yes' : 'no'}`,
-                        role: user.RoleTitle,
-                        address: `${user.StreetTitle ? user.StreetTitle : 'no address'}`
-                    };
-                })
-                this.setState({ orders: updatedData,
-                    isLoading: false
+                this.setState({
+                    totalPrice: data["TotalMarketPrice"]
                  });
             });
     }
 
+    componentDidUpdate = () => {
+        this.getStat();
+    }
+
     componentDidMount = () => {
-      this.getOrders();
+      this.getStat();
     }
     
-
-
     render() {
         const { state, props } = this;
         return  (<TabPane tabId={props.tabId} className="tabs-wrapper">
                     <Col sm="12">
                         <Row className="item">
+                            <Col sm={12}><h1 className="display-4">Total revenue: {+state.totalPrice} &#8381;</h1></Col>
                         </Row>
                         <Row>
-                            <ReactTable 
-                                className="col-sm-12"
-                                showPagination={false}
-                                minRows={0}
-                                data={state.orders}
-                                columns={[
-                                    {
-                                        Header: "User name",
-                                        accessor: 'name'
-                                    },
-                                    {
-                                        Header: "Phone",
-                                        accessor: 'phone'
-                                    },
-                                    {
-                                        Header: "Delivery",
-                                        accessor: 'delivery'
-                                    },
-                                    {
-                                        Header: "Role",
-                                        accessor: 'role'
-                                    },
-                                    {
-                                        Header: "Address",
-                                        accessor: 'address',
-                                        sortable: false
-                                    }
-                                ]}
-                            />
+                            
                         </Row>
                     </Col>
                 </TabPane>

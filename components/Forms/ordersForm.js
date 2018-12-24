@@ -109,7 +109,7 @@ class OrderForm extends React.Component {
                                 <FormGroup key={el} check>
                                     <Label check>
                                         <Field name="windowRaisers" component={FormCheckbox} />{' '}
-                                        Add window raisers: {props.params[el]}, +{+props.prices[el]} rubles to total price
+                                        Add window raisers: {props.params[el]}, +{+props.prices[el]} &#8381; to total price
                                 </Label>
                                 </FormGroup>
                             );
@@ -117,7 +117,7 @@ class OrderForm extends React.Component {
                                 <FormGroup key={el} check>
                                     <Label check>
                                         <Field name="cabinMaterial" component={FormCheckbox} />{' '}
-                                        Add emproved cabin material: {props.params[el]}, +{+props.prices[el]} rubles to total price
+                                        Add emproved cabin material: {props.params[el]}, +{+props.prices[el]} &#8381; to total price
                                 </Label>
                                 </FormGroup>
                             );
@@ -125,7 +125,7 @@ class OrderForm extends React.Component {
                                 <FormGroup key={el} check>
                                     <Label check>
                                         <Field name="heatedSteeringWheel" component={FormCheckbox} />{' '}
-                                        Add heated steering wheel, +{+props.prices[el]} rubles to total price
+                                        Add heated steering wheel, +{+props.prices[el]} &#8381; to total price
                                 </Label>
                                 </FormGroup>
                             );
@@ -133,7 +133,7 @@ class OrderForm extends React.Component {
                                 <FormGroup key={el} check>
                                     <Label check>
                                         <Field name="parkingSensors" component={FormCheckbox} />{' '}
-                                        Add parking sensors, +{+props.prices[el]} rubles to total price
+                                        Add parking sensors, +{+props.prices[el]} &#8381; to total price
                                 </Label>
                                 </FormGroup>
                             );
@@ -141,7 +141,7 @@ class OrderForm extends React.Component {
                                 <FormGroup key={el} check>
                                     <Label check>
                                         <Field name="rearViewCamera" component={FormCheckbox} />{' '}
-                                        Add rear view camera, +{+props.prices[el]} rubles to total price
+                                        Add rear view camera, +{+props.prices[el]} &#8381; to total price
                                 </Label>
                                 </FormGroup>
                             );
@@ -149,7 +149,7 @@ class OrderForm extends React.Component {
                                 <FormGroup key={el} check>
                                     <Label check>
                                         <Field name="wheelDisks" component={FormCheckbox} />{' '}
-                                        Add wheel disks: {props.params[el]}, +{+props.prices[el]} rubles to total price
+                                        Add wheel disks: {props.params[el]}, +{+props.prices[el]} &#8381; to total price
                                 </Label>
                                 </FormGroup>
                             );
@@ -157,7 +157,7 @@ class OrderForm extends React.Component {
                                 <FormGroup key={el} check >
                                     <Label check>
                                         <Field name="adaptiveHeadlights" component={FormCheckbox} />{' '}
-                                        Add adaptive headlights, +{+props.prices[el]} rubles to total price
+                                        Add adaptive headlights, +{+props.prices[el]} &#8381; to total price
                                 </Label>
                                 </FormGroup>
                             );
@@ -168,7 +168,7 @@ class OrderForm extends React.Component {
                 </FormGroup>
                 <Row style={{ marginBottom: '20px' }}>
                     <Col sm="12">
-                        <h5>Basic price for this model: {this.state.price} rubles</h5>
+                        <h5>Basic price for this model: {this.state.price} &#8381;</h5>
                     </Col>
                 </Row>
                 <Button outline color="primary" size="lg" block>Buy a car</Button>

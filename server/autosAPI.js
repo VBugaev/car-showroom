@@ -161,6 +161,41 @@ const getAllOrders = async () => {
     }
 }
 
+const getAllOrdersByUser = async (id) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('UserId', sql.Int, id)
+        .execute('GetAllOrdersByUser');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getSumOrdersPrices = async () => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .execute('CountAllOrdersPrice');
+        return result.recordset[0];
+    } catch (error) {
+        throw error;
+    }
+}
+
+const getSumOrdersPricesByBrand = async (brand) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('Brand', sql.NVarChar(100), brand)
+        .execute('CountAllOrdersPriceByBrand');
+        return result.recordset[0];
+    } catch (error) {
+        throw error;
+    }
+}
+
 const getAdditionalParams = async (id) => {
     try {
         let connectedPool = await pool;
@@ -219,6 +254,19 @@ const getAllStreets = async () => {
     }
 }
 
+const updateOrder = async (updData) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('Id', sql.Int, updData.id)
+        .input('StatusId', sql.Int, updData.statusid)
+        .execute('UpdateOrder');
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const getAllStatuses = async () => {
     try {
         let connectedPool = await pool;
@@ -234,14 +282,17 @@ module.exports = (router) => {
     router.route('/stat')
     .get(async (req, res) => {
         try {
-            const resultParams = await getAdditionalParams(req.query.id);
-            const resultPrices = await getAdditionalParamsPrices(req.query.id);
-            const autoData = await getAutoById(req.query.id);
-            res.send({
-                autoData,
-                resultParams,
-                resultPrices
-            });
+            const stat = await getSumOrdersPrices();
+            res.send(stat);
+        } catch (error) {
+            throw error;
+        }
+    })
+    router.route('/stat/:brand')
+    .get(async (req, res) => {
+        try {
+            const stat = await getSumOrdersPricesByBrand(req.params.brand);
+            res.send(stat);
         } catch (error) {
             throw error;
         }
@@ -280,6 +331,15 @@ module.exports = (router) => {
             res.status(500).send(error);
         }
     })
+    router.route('/orders/:id')
+    .get(async (req, res) => {
+        try {
+            const result = await getAllOrdersByUser(req.params.id);
+            res.send(result);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    })
 
     router.route('/orders')
     .get(async (req, res) => {
@@ -296,6 +356,14 @@ module.exports = (router) => {
             const result = await createOrder(req.body);
             await createOrderParams(req.body, result.recordset[0].Id);
             res.send(result);
+        } catch (error) {
+            res.status(500).send(err);
+        }
+    })
+    .put(async (req, res) => {
+        try {
+            await updateOrder(req.query);
+            res.status(200).send('Ok');
         } catch (error) {
             res.status(500).send(err);
         }

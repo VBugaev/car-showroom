@@ -1,7 +1,8 @@
  const config = {
     user: 'debug',
     password: 'debug',
-    server: 'localhost',
+    server: '127.0.0.1',
+    port: 1703,
     database: 'CarShowroomDB',
     options: {
       encrypt: true
