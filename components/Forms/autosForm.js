@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { FormGroup, Button, Label, Input, Col } from 'reactstrap';
 
 import { FormDatePicker, FormInput, FormCheckbox } from '../FormComponents';
+import { required, maxLength, letters, phoneNumber, number, minValue } from './validators.js';
 
 const DatePickerWithTime = (props) => {
     const startDate = moment(Date.now()).add(1, 'd');
@@ -44,13 +45,15 @@ class CountriesSelect extends Component {
 
     render() {
         const { countries } = this.state;
-        const { input } = this.props;
-        return (
+        const { input, meta } = this.props;
+        return (<>
             <Input type="select" name="select" id="countriesSelect" {...input}>
                 <option>Select country</option>
                 {countries.map(country => <option key={country.Id} value={country.Id}>{country.Title}</option>)}
             </Input>
-        );
+            {meta.touched && ((meta.error && <span className="text-danger">{meta.error}</span>) ||
+                (meta.warning && <span>{meta.warning}</span>))}
+        </>);
     }
 }
 
@@ -69,51 +72,51 @@ const AutosForm = props => {
             <h1 className="display-4 mb-4 mt-4">Create a car</h1>
             <FormGroup>
                 <Label>Brand</Label>
-                <Field name="brand" component={FormInput} type="text" />
+                <Field validate={[required, maxLength(100) , letters]} name="brand" component={FormInput} type="text" />
             </FormGroup>
             <FormGroup>
                 <Label>Model</Label>
-                <Field name="model" component={FormInput} />
+                <Field validate={[required, maxLength(200)]} name="model" component={FormInput} />
             </FormGroup>
             <FormGroup>
                 <Label>Country</Label>
-                <Field name="country" component={CountriesSelect} />
+                <Field validate={required} name="country" component={CountriesSelect} />
             </FormGroup>
             <FormGroup>
                 <Label>Price</Label>
-                <Field name="price" component={FormInput} />
+                <Field validate={[required, maxLength(50), number, minValue(100)]} name="price" component={FormInput} />
             </FormGroup>
             <FormGroup>
                 <Label>Warehouse count</Label>
-                <Field name="warehouseCount" component={FormInput} />
+                <Field validate={[required, maxLength(50), number, minValue(0)]} name="warehouseCount" component={FormInput} />
             </FormGroup>
             <FormGroup>
                 <Label>Body type</Label>
-                <Field name="bodyType" component={FormInput} />
+                <Field validate={[required, maxLength(100)]} name="bodyType" component={FormInput} />
             </FormGroup>
             <FormGroup>
                 <Label>Engine type</Label>
-                <Field name="engineType" component={FormInput} />
+                <Field validate={[required, maxLength(50)]} name="engineType" component={FormInput} />
             </FormGroup>
             <FormGroup>
                 <Label>Places count</Label>
-                <Field name="placesCount" component={FormInput} />
+                <Field validate={[required, number, maxLength(12)]} name="placesCount" component={FormInput} />
             </FormGroup>
             <FormGroup>
                 <Label>Air conditioning</Label>
-                <Field name="airConditioning" component={FormInput} />
+                <Field validate={[required, maxLength(50)]} name="airConditioning" component={FormInput} />
             </FormGroup>
             <FormGroup>
                 <Label>Drive unit</Label>
-                <Field name="driveUnit" component={FormInput} />
+                <Field validate={[required, maxLength(50)]} name="driveUnit" component={FormInput} />
             </FormGroup>
             <FormGroup>
                 <Label>Transmission</Label>
-                <Field name="transmission" component={FormInput} />
+                <Field validate={[required, maxLength(50)]} name="transmission" component={FormInput} />
             </FormGroup>
             <FormGroup>
                 <Label>Max speed</Label>
-                <Field name="maxSpeed" component={FormInput} />
+                <Field validate={[required, number, maxLength(5)]} name="maxSpeed" component={FormInput} />
             </FormGroup>
             <h5>Create additional params and prices</h5>
             <FormGroup style={{ marginBottom: '10px' }} row>
@@ -194,7 +197,7 @@ const AutosForm = props => {
                     { !!cabinMaterial && <Field name="cabinMaterialPrice" component={FormInput} />}
                 </Col>
             </FormGroup> 
-            <Button className="user-section-btn mb-5">Create auto</Button>
+            <Button disabled={props.submitting} className="user-section-btn mb-5">Create auto</Button>
         </form>
     );
 };

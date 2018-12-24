@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 
 import { Input } from 'reactstrap';
 
-export const FormDatePicker = (props) => (
+export const FormDatePicker = (props) => (<>
     <DatePicker
         className="form-control"
         selected={props.input && (props.input.value || null)}
@@ -18,14 +18,22 @@ export const FormDatePicker = (props) => (
         maxTime={props.maxTime}
         placeholder={props.placeholder}
     />
-);
+    { props.meta.touched && ((props.meta.error && <span className="text-danger">{props.meta.error}</span>) || 
+    (props.meta.warning && <span>{props.meta.warning}</span>)) }
+</>);
 
-export const FormCheckbox = ({ input }) => (<Input {...input} type="checkbox" />);
+export const FormCheckbox = ({ input, meta: { touched, error, warning } }) => (<>
+<Input {...input} type="checkbox" />
+{ touched && ((error && <span className="text-danger">{error}</span>) || (warning && <span>{warning}</span>)) }
+</>);
 
-export const FormInput = ({ input, disabled, className, placeholder, type }) => (
+export const FormInput = ({ input, disabled, className, placeholder, type,
+    meta: { touched, error, warning } }) => (<>
     <Input {...input}
         disabled={disabled}
         placeholder={placeholder || ''}
         className={className || ''}
         type={type || 'text'}
-        autoComplete="off" />);
+        autoComplete="off" />
+        { touched && ((error && <span className="text-danger">{error}</span>) || (warning && <span>{warning}</span>)) }
+        </>);
