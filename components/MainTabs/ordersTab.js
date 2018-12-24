@@ -84,28 +84,32 @@ export class OrdersTab extends React.Component {
         fetch(`http://localhost:3000/api/orders`)
             .then(r => r.json())
             .then(data => {
-                const updatedData = data.map(order => {
+                if (data) {
+                    const updatedData = data.map(order => {
                     
-                    return {
-                        id: order.Id,
-                        dateValue: order.Date,
-                        date: dayjs(order.Date).format('DD/MM/YYYY HH:mm'),
-                        auto: `${order.Brand} ${order.Model}`,
-                        totalPrice: +order.TotalPrice,
-                        status: order.StatusTitle,
-                        statusid: order.StatusId,
-                        bonuses: `
-                        ${order.WindowRaisers ? 'Window raisers; ' : ''}
-                        ${order.WheelDisks ? 'Wheel disks; ' : ''}
-                        ${order.AdaptiveHeadlights ? 'Adaptive headlights; ' : ''}
-                        ${order.CabinMaterial ? 'Cabin material; ' : ''}
-                        ${order.HeatedSteeringWheel ? 'Heated steering wheel; ' : ''}
-                        ${order.ParkingSensors ? 'Parking sensors; ' : ''}
-                        ${order.RearViewCamera ? 'Rear-view camera; ' : ''}`,
-                        user: `${order.Name}, ${order.Phone}`
-                    };
-                })
-                this.setState({ orders: updatedData });
+                        return {
+                            id: order.Id,
+                            dateValue: order.Date,
+                            date: dayjs(order.Date).format('DD/MM/YYYY HH:mm'),
+                            auto: `${order.Brand} ${order.Model}`,
+                            totalPrice: +order.TotalPrice,
+                            status: order.StatusTitle,
+                            statusid: order.StatusId,
+                            bonuses: `
+                            ${order.WindowRaisers ? 'Window raisers; ' : ''}
+                            ${order.WheelDisks ? 'Wheel disks; ' : ''}
+                            ${order.AdaptiveHeadlights ? 'Adaptive headlights; ' : ''}
+                            ${order.CabinMaterial ? 'Cabin material; ' : ''}
+                            ${order.HeatedSteeringWheel ? 'Heated steering wheel; ' : ''}
+                            ${order.ParkingSensors ? 'Parking sensors; ' : ''}
+                            ${order.RearViewCamera ? 'Rear-view camera; ' : ''}`,
+                            user: `${order.Name}, ${order.Phone}`
+                        };
+                    });
+                    this.setState({ orders: updatedData });
+                } else {
+                    this.setState({ orders: [] })
+                }
             });
     }
 

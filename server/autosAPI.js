@@ -254,6 +254,20 @@ const getAllStreets = async () => {
     }
 }
 
+const createTestDrive = async (data) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('UserId', sql.Int, data.userid)
+        .input('AutoId', sql.Int, data.autoid)
+        .input('Date', sql.DateTimeOffset(7), moment(data.date).toDate())
+        .execute('CreateTestDriveRecord');
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const updateOrder = async (updData) => {
     try {
         let connectedPool = await pool;
@@ -272,6 +286,29 @@ const getAllStatuses = async () => {
         let connectedPool = await pool;
         const result = await connectedPool.request()
         .execute('GetAllStatuses');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const getAllTestDrives = async () => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .execute('GetAllTestDrives');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const getAllTestDrivesByUser = async (id) => {
+    try {
+        let connectedPool = await pool;
+        const result = await connectedPool.request()
+        .input('UserId', sql.Int, id)
+        .execute('GetAllTestDrivesByUser');
         return result.recordset;
     } catch (error) {
         throw error;
@@ -357,7 +394,7 @@ module.exports = (router) => {
             await createOrderParams(req.body, result.recordset[0].Id);
             res.send(result);
         } catch (error) {
-            res.status(500).send(err);
+            res.status(500).send(error);
         }
     })
     .put(async (req, res) => {
@@ -365,7 +402,37 @@ module.exports = (router) => {
             await updateOrder(req.query);
             res.status(200).send('Ok');
         } catch (error) {
-            res.status(500).send(err);
+            res.status(500).send(error);
+        }
+    })
+    router.route('/testdrives')
+    .get(async (req, res) => {
+        try {
+            const result = await getAllTestDrives();
+            res.send(result);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    })
+    router.route('/testdrives/:id')
+    .get(async (req, res) => {
+        try {
+            const result = await getAllTestDrivesByUser(req.params.id);
+            res.send(result);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    })
+
+    router.route('/testdrive')
+    .post(async (req, res) => {
+        try {
+            console.log(req.body);
+            await createTestDrive(req.body);
+            res.status(200).send('Created');
+        } catch (error) {
+            console.log(error);
+            res.status(500).send(error)
         }
     })
     router.route('/autos')

@@ -44,6 +44,10 @@ app.prepare()
     app.render(req, res, '/order', req.query);
   })
 
+  server.get('/testDrive/new', (req, res) => {
+    app.render(req, res, '/testDrive', req.query);
+  })
+
   server.get('*', (req, res) => {
     return handle(req, res)
   })
