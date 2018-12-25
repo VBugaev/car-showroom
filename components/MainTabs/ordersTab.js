@@ -11,6 +11,7 @@ import './tabs.css';
 import dayjs from 'dayjs';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
+import isEqual from 'react-fast-compare';
 
 
 const OrderStatusesSelect = (props) => {
@@ -44,10 +45,6 @@ export class OrdersTab extends React.Component {
         this.setState({updateStatusId: e.target.value});
     }
 
-    componentDidUpdate = () => {
-        const isUser = this.props.userInfo.role === 'User';
-        isUser ? this.getOrdersByUser() : this.getOrders();
-    }
 
     componentDidMount = () => {
         fetch('http://localhost:3000/api/statuses')

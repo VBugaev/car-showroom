@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Field, reduxForm } from 'redux-form';
 import { FormDatePicker } from '../FormComponents';
 import moment from 'moment';
+import { required, isValidDate } from './validators.js';
 
 const DatePickerWithTime = (props) => {
     const startDate = moment(Date.now()).add(1, 'd');
@@ -25,9 +26,9 @@ class TestDriveForm extends React.Component {
             <form onSubmit={props.handleSubmit} action="POST">
                 <FormGroup>
                     <Label style={{ marginRight: '10px' }}>Choose date for test-drive</Label>
-                    <Field name="date" component={DatePickerWithTime} type="text" />
+                    <Field validate={[required, isValidDate]} name="date" component={DatePickerWithTime} type="text" />
                 </FormGroup>
-                <Button outline color="primary" size="lg" block>Register test-drive</Button>
+                <Button disabled={props.submitting} outline color="primary" size="lg" block>Register test-drive</Button>
                 <Link href="/">
                     <a className="btn btn-outline-secondary btn-lg btn-block">Go back</a>
                 </Link>

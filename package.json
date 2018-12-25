@@ -48,6 +48,7 @@
     "react": "^16.5.2",
     "react-datepicker": "^2.0.0",
     "react-dom": "^16.5.2",
+    "react-fast-compare": "^2.0.4",
     "react-redux": "^5.1.1",
     "react-scroll": "^1.7.10",
     "react-spinners": "^0.4.7",

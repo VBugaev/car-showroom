@@ -25,16 +25,14 @@ export class StatisticsTab extends React.Component {
     getStat = () => {
         fetch('http://localhost:3000/api/stat')
             .then(r => r.json())
-            .then(data => {
-                this.setState({
-                    totalPrice: data["TotalMarketPrice"],
-                    totalOrdersCount: data["OrdersCount"]
-                });
+            .then(updData => {
                 fetch('http://localhost:3000/api/statbrands')
                     .then(r => r.json())
                     .then(data => {
                         this.setState({
-                            brandsPrices: data || []
+                            brandsPrices: data || [],
+                            totalPrice: updData["TotalMarketPrice"],
+                            totalOrdersCount: updData["OrdersCount"]
                         });
                     });
             });
@@ -59,27 +57,28 @@ export class StatisticsTab extends React.Component {
                     <Col sm={12}><h1 className="display-4">Total orders purchased: {+state.totalOrdersCount}</h1></Col>
                 </Row>
                 <Row className="item">
-                    <Col sm={12}><h1 className="display-4">Metrics by brands {+state.totalOrdersCount}</h1></Col>
-                    <ReactTable 
-                                className="col-sm-12"
-                                showPagination={false}
-                                minRows={0}
-                                data={state.brandsPrices}
-                                columns={[
-                                    {
-                                        Header: "Revenue",
-                                        accessor: 'TotalMarketPrice'
-                                    },
-                                    {
-                                        Header: "Orders purchased",
-                                        accessor: 'OrdersCount'
-                                    },
-                                    {
-                                        Header: "Brand",
-                                        accessor: 'Brand'
-                                    }
-                                ]}
-                            />
+                    <Col sm={12}><h1 className="display-4">Metrics by brands</h1></Col>
+                    <ReactTable
+                        style={{ marginTop: '10px' }}
+                        className="col-sm-12"
+                        showPagination={false}
+                        minRows={0}
+                        data={state.brandsPrices}
+                        columns={[
+                            {
+                                Header: "Brand",
+                                accessor: 'Brand'
+                            },
+                            {
+                                Header: "Orders purchased",
+                                accessor: 'OrdersCount'
+                            },
+                            {
+                                Header: "Revenue",
+                                accessor: 'TotalMarketPrice'
+                            }
+                        ]}
+                    />
                 </Row>
             </Col>
         </TabPane>
