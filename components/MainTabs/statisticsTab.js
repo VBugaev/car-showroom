@@ -17,7 +17,8 @@ export class StatisticsTab extends React.Component {
         super(props);
         this.state = {
             totalPrice: null,
-            brandPrice: null
+            totalOrdersCount: null,
+            brandsPrices: []
         }
     }
 
@@ -26,8 +27,16 @@ export class StatisticsTab extends React.Component {
             .then(r => r.json())
             .then(data => {
                 this.setState({
-                    totalPrice: data["TotalMarketPrice"]
-                 });
+                    totalPrice: data["TotalMarketPrice"],
+                    totalOrdersCount: data["OrdersCount"]
+                });
+                fetch('http://localhost:3000/api/statbrands')
+                    .then(r => r.json())
+                    .then(data => {
+                        this.setState({
+                            brandsPrices: data || []
+                        });
+                    });
             });
     }
 
@@ -36,23 +45,46 @@ export class StatisticsTab extends React.Component {
     }
 
     componentDidMount = () => {
-      this.getStat();
+        this.getStat();
     }
-    
+
     render() {
         const { state, props } = this;
-        return  (<TabPane tabId={props.tabId} className="tabs-wrapper">
-                    <Col sm="12">
-                        <Row className="item">
-                            <Col sm={12}><h1 className="display-4">Total revenue: {+state.totalPrice} &#8381;</h1></Col>
-                        </Row>
-                        <Row>
-                            
-                        </Row>
-                    </Col>
-                </TabPane>
-            );
+        return (<TabPane tabId={props.tabId} className="tabs-wrapper">
+            <Col sm="12">
+                <Row className="item">
+                    <Col sm={12}><h1 className="display-4">Total revenue: {+state.totalPrice} &#8381;</h1></Col>
+                </Row>
+                <Row className="item">
+                    <Col sm={12}><h1 className="display-4">Total orders purchased: {+state.totalOrdersCount}</h1></Col>
+                </Row>
+                <Row className="item">
+                    <Col sm={12}><h1 className="display-4">Metrics by brands {+state.totalOrdersCount}</h1></Col>
+                    <ReactTable 
+                                className="col-sm-12"
+                                showPagination={false}
+                                minRows={0}
+                                data={state.brandsPrices}
+                                columns={[
+                                    {
+                                        Header: "Revenue",
+                                        accessor: 'TotalMarketPrice'
+                                    },
+                                    {
+                                        Header: "Orders purchased",
+                                        accessor: 'OrdersCount'
+                                    },
+                                    {
+                                        Header: "Brand",
+                                        accessor: 'Brand'
+                                    }
+                                ]}
+                            />
+                </Row>
+            </Col>
+        </TabPane>
+        );
     }
 }
- export default StatisticsTab;
+export default StatisticsTab;
 

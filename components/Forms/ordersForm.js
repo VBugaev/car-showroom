@@ -5,6 +5,7 @@ import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { FormCheckbox, FormDatePicker } from '../FormComponents';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import { required, isValidDate } from './validators.js';
 
 const DatePickerWithTime = (props) => {
     const startDate = moment(Date.now()).add(1, 'd');
@@ -99,7 +100,7 @@ class OrderForm extends React.Component {
             <form onSubmit={props.handleSubmit} action="POST">
                 <FormGroup>
                     <Label style={{ marginRight: '10px' }}>Choose date for order purchasing</Label>
-                    <Field name="date" component={DatePickerWithTime} type="text" placeholder="Choose date for taking order" />
+                    <Field validate={[required, isValidDate]} name="date" component={DatePickerWithTime} type="text" placeholder="Choose date for taking order" />
                 </FormGroup>
                 <FormGroup style={{ marginBottom: '20px' }}>
                     <h5>Additional parameters for current model:</h5>

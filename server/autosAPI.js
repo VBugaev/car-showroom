@@ -186,13 +186,12 @@ const getSumOrdersPrices = async () => {
     }
 }
 
-const getSumOrdersPricesByBrand = async (brand) => {
+const getSumOrdersPricesByBrands = async (brand) => {
     try {
         let connectedPool = await pool;
         const result = await connectedPool.request()
-        .input('Brand', sql.NVarChar(100), brand)
         .execute('CountAllOrdersPriceByBrand');
-        return result.recordset[0];
+        return result.recordset;
     } catch (error) {
         throw error;
     }
@@ -327,10 +326,10 @@ module.exports = (router) => {
             throw error;
         }
     })
-    router.route('/stat/:brand')
+    router.route('/statbrands')
     .get(async (req, res) => {
         try {
-            const stat = await getSumOrdersPricesByBrand(req.params.brand);
+            const stat = await getSumOrdersPricesByBrands();
             res.send(stat);
         } catch (error) {
             throw error;

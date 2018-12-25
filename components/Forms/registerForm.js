@@ -4,16 +4,28 @@ import Link from 'next/link';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { FormInput, FormCheckbox } from '../FormComponents';
 import { connect } from 'react-redux';
-import { required, maxLength, letters, phoneNumber } from './validators.js';
+import { required, maxLength, minValue, letters, phoneNumber } from './validators.js';
 
-class StreetsSelect extends React.Component {
+const StreetsSelect = (props) => {
+    const { input, meta, streets } = props;
+    return (<>
+        <Input type="select" name="select" id="streetsSelect" {...input}>
+            <option>Select Street</option>
+            {streets.map(street => <option key={street.id} value={street.id}>{street.name}</option>)}
+        </Input>
+        {meta.touched && ((meta.error && <span className="text-danger">{meta.error}</span>) ||
+            (meta.warning && <span>{meta.warning}</span>))}
+    </>
+    );
+}
+
+class RegisterForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             streets: []
-        };
+        }
     }
-
     componentDidMount() {
         fetch('api/streets')
             .then(r => r.json())
@@ -26,22 +38,6 @@ class StreetsSelect extends React.Component {
             })
     }
 
-    render() {
-        const { streets } = this.state;
-        const { input, meta } = this.props;
-        return (<>
-            <Input type="select" name="select" id="streetsSelect" {...input}>
-                <option>Select Street</option>
-                {streets.map(street => <option key={street.id} value={street.id}>{street.name}</option>)}
-            </Input>
-            {meta.touched && ((meta.error && <span className="text-danger">{meta.error}</span>) ||
-                (meta.warning && <span>{meta.warning}</span>))}
-        </>
-        );
-    }
-}
-
-class RegisterForm extends React.Component {
     render() {
         const { props } = this;
         return (
@@ -59,7 +55,7 @@ class RegisterForm extends React.Component {
                     <Field validate={required} name="password" component={FormInput} type="password" placeholder="Enter password" />
                 </FormGroup>
                 <FormGroup>
-                    <Field validate={required} name="street" component={StreetsSelect} />
+                    <Field validate={required} name="street" component={StreetsSelect} streets={this.state.streets} />
                 </FormGroup>
                 {props.hasStreet && <FormGroup check className="mb-5">
                     <Label check>
