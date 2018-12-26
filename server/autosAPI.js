@@ -29,8 +29,8 @@ const createAuto = async (data) => {
     try {
         let connectedPool = await pool;
         const result = await connectedPool.request()
-        .input('Brand', sql.NVarChar(100), data.brand)
-        .input('Model', sql.NVarChar(200), data.model)
+        .input('Brand', sql.NVarChar(100), data.brand.trim())
+        .input('Model', sql.NVarChar(200), data.model.trim())
         .input('Price', sql.BigInt, +data.price)
         .input('CountryId', sql.Int, +data.country)
         .input('WarehouseCount', sql.Int, +data.warehouseCount)
@@ -46,12 +46,12 @@ const createAutoParams = async (data, id) => {
         let connectedPool = await pool;
         const result = await connectedPool.request()
         .input('Id', sql.Int, id)
-        .input('BodyType', sql.NVarChar(50), data.bodyType)
+        .input('BodyType', sql.NVarChar(50), data.bodyType.trim())
         .input('PlacesCount', sql.Int, +data.placesCount)
-        .input('EngineType', sql.NVarChar(50), data.engineType)
-        .input('AirConditioning', sql.NVarChar(50), data.airConditioning)
-        .input('DriveUnit', sql.NVarChar(50), data.driveUnit)
-        .input('Transmission', sql.NVarChar(50), data.transmission)
+        .input('EngineType', sql.NVarChar(50), data.engineType.trim())
+        .input('AirConditioning', sql.NVarChar(50), data.airConditioning.trim())
+        .input('DriveUnit', sql.NVarChar(50), data.driveUnit.trim())
+        .input('Transmission', sql.NVarChar(50), data.transmission.trim())
         .input('MaxSpeed', sql.Int, +data.maxSpeed)
         .execute('CreateCarEquipment');
         return result;
@@ -447,11 +447,16 @@ module.exports = (router) => {
     })
     .post(async (req, res) => {
         try {
-            const result = await createAuto(req.body);
-            await createAutoParams(req.body, result.Id);
-            await createAutoAdditionalParams(req.body, result.Id);
-            await createAutoAdditionalParamsPrices(req.body, result.Id);
-            res.send(result);
+            const autosResult = await getAllAutos();
+            if (autosResult.find(auto => `${auto.Brand.toUpperCase()} ${auto.Model.toUpperCase()}` === `${req.body.brand.toUpperCase()} ${req.body.model.toUpperCase()}`)) {
+                res.send({ error: 'This car has been already created' });
+            } else {
+                const result = await createAuto(req.body);
+                await createAutoParams(req.body, result.Id);
+                await createAutoAdditionalParams(req.body, result.Id);
+                await createAutoAdditionalParamsPrices(req.body, result.Id);
+                res.send(result);
+            }
         } catch (error) {
             res.status(500).send(err);
         }

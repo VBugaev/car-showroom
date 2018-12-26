@@ -88,7 +88,7 @@ export class ClientsTab extends React.Component {
                 return { id: +role.Id,
                 name: role.Title 
             };
-            })
+            }).filter(role => role.name !== 'Admin');
             this.setState({ roles: updatedData });
             this.getClients();
         });
@@ -96,7 +96,7 @@ export class ClientsTab extends React.Component {
 
     render() {
         const { state, props } = this;
-        const isManager = props.userInfo === 'Manager';
+        const isManager = props.userInfo.role === 'Manager';
         return  (<TabPane tabId={props.tabId} className="tabs-wrapper">
                     <Col sm="12">
                         <Row className="item">

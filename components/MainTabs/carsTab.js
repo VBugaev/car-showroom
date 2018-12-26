@@ -130,7 +130,6 @@ class CarsTab extends Component {
                                             {(isUser || isManager) && <Col sm="3"><Link href={`/testDrive/new?autoid=${elem.Id}&userid=${props.userInfo.id}&autoname=${`${elem.Brand} ${elem.Model}`}`}>
                                                     <Button disabled={notAvailable}>Register on test-drive</Button>
                                                 </Link></Col>}
-                                            {isAdmin && <Col sm="3"><Button onClick={() => this.deleteAuto(elem.Id)}>Delete car</Button></Col>}
                                         </Row>
                                     </Card>
                                 </Col>

@@ -145,7 +145,7 @@ class AutosForm extends React.PureComponent {
                         Parking sensors
                     </Label>
                     <Col sm={5}>
-                        { hasParkingSensors && <Field name="parkingSensorsPrice" component={FormInput} /> }
+                        { hasParkingSensors && <Field validate={[number, minValue0]} name="parkingSensorsPrice" component={FormInput} /> }
                     </Col>
                 </FormGroup>
                 <FormGroup check row>
@@ -154,7 +154,7 @@ class AutosForm extends React.PureComponent {
                         Rear-view camera
                     </Label>
                     <Col sm={5}>
-                        { hasRearViewCamera && <Field name="rearViewCameraPrice" component={FormInput} />}
+                        { hasRearViewCamera && <Field validate={[number, minValue0]} name="rearViewCameraPrice" component={FormInput} />}
                     </Col>
                 </FormGroup>
                 <FormGroup  style={{ marginBottom: '10px' }} check row>
@@ -163,7 +163,7 @@ class AutosForm extends React.PureComponent {
                         Heated steering wheel
                     </Label>
                     <Col sm={5}>
-                       { hasHeatedSteeringWheel && <Field name="heatedSteeringWheelPrice" component={FormInput} />}
+                       { hasHeatedSteeringWheel && <Field validate={[number, minValue0]} name="heatedSteeringWheelPrice" component={FormInput} />}
                     </Col>
                 </FormGroup>
                 <FormGroup style={{ marginBottom: '10px' }} row>
@@ -177,7 +177,7 @@ class AutosForm extends React.PureComponent {
                         Price
                     </Col>
                     <Col sm={2}>
-                        { !!wheelDisks && <Field name="wheelDisksPrice" component={FormInput}/>}
+                        { !!wheelDisks && <Field validate={[number, minValue0]} name="wheelDisksPrice" component={FormInput}/>}
                     </Col>
                 </FormGroup>
                 <FormGroup style={{ marginBottom: '10px' }} check row>
@@ -200,7 +200,7 @@ class AutosForm extends React.PureComponent {
                         Price
                     </Col>
                     <Col sm={2}>
-                        { !!cabinMaterial && <Field name="cabinMaterialPrice" component={FormInput} />}
+                        { !!cabinMaterial && <Field validate={[number, minValue0]} name="cabinMaterialPrice" component={FormInput} />}
                     </Col>
                 </FormGroup> 
                 <Button disabled={props.submitting} className="user-section-btn mb-5">Create auto</Button>
